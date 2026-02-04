@@ -185,4 +185,9 @@ https://github.com/gorbit99/codewindow.nvim
 - Fix non-functional `vim.keymaps.*.noremap`. Now, setting it to false is
   equivalent to `:lua vim.keymap.set(..., { remap = true })`
 
+[Ladas552](https://github.com/Ladas552):
+
+- Add [blink-pairs] plugin in `vim.autopairs.blink-pairs` with `enable` and
+  `setupOpts`
+
 <!-- vim: set textwidth=80: -->
