@@ -1839,6 +1839,16 @@ setting. Use <code>workspaces</code> instead:</p>
 settings (nvf's <a class="option-reference" href="options.html#option-vim-keymaps"><code class="nixos-option">vim.keymaps</code></a>)</li>
 </ul>
 </li>
+<li>
+<p><code>languages.{terraform,hcl}</code>: LSP servers now default to <code>tofu-ls</code>. While this
+is unlikely to cause any noticeable change in behavior or breakage, it's
+mentioned just in case.</p>
+</li>
+<li>
+<p><code>vim.treesitter.foldByDefault</code> is removed. Folding behavior should be
+controlled via <code>vim.options.foldenable</code> directly instead. RIP
+<code>vim.treesitter.foldByDefault</code> 2026-03-19 - 2026-03-19.</p>
+</li>
 </ul>
 <p><a href="https://github.com/snoweuph">Snoweuph</a></p>
 <ul>
@@ -1869,8 +1879,27 @@ New are:</p>
 allow valid options. <code>default</code> is no longer valid. <code>inline</code> and <code>split</code> are
 two new valid options.</p>
 </li>
+<li>
+<p>Added <a href="https://taplo.tamasfe.dev/">taplo</a> as the default formatter and lsp for
+<code>languages.toml</code> so we don't default to AI-Slop.</p>
+</li>
+<li>
+<p>Added <code>json5</code> into <code>languages.json</code>. Some options where renamed.</p>
+</li>
 </ul>
 <h2 id="sec-release-0-9-changelog">Changelog</h2>
+<p><a href="https://github.com/midischwarz12">midischwarz12</a>:</p>
+<ul>
+<li>
+<p>Changed the prettier-plugin-astro build to use <code>writableTmpDirAsHomeHook</code> to
+avoid pnpm hook failures in sandboxed builds.</p>
+</li>
+<li>
+<p>Fix <code>vim.utility.leetcode-nvim</code> adding <code>fzf-lua</code> to <code>vim.startPlugins</code> when
+<code>vim.fzf-lua</code> already manages the plugin lazily, avoiding duplicate <code>/start</code>
+and <code>/opt</code> installs and the corresponding <code>mnw</code> evaluation warning.</p>
+</li>
+</ul>
 <p><a href="https://github.com/taylrfnt">taylrfnt</a></p>
 <ul>
 <li>
@@ -1878,7 +1907,7 @@ two new valid options.</p>
 importing a <code>nixosModule</code> into a Darwin flake were less than ideal, and when
 users fork and update npins, they are prone to encountering errors like the
 following:</p>
-<pre class="highlight"><code class="language-shell"><span style="color:rgb(132,139,152);">(</span><span style="color:rgb(97,175,239);">class:</span>&nbsp;<span style="color:rgb(152,195,121);">"nixos"</span><span style="color:rgb(132,139,152);">)</span>&nbsp;<span style="color:rgb(97,175,239);">cannot</span>&nbsp;<span style="color:rgb(232,102,113);">be</span>&nbsp;<span style="color:rgb(232,102,113);">imported</span>&nbsp;<span style="color:rgb(232,102,113);">into</span>&nbsp;<span style="color:rgb(232,102,113);">a</span>&nbsp;<span style="color:rgb(232,102,113);">module</span>&nbsp;<br><span style="color:rgb(97,175,239);">evaluation</span>&nbsp;<span style="color:rgb(232,102,113);">that</span>&nbsp;<span style="color:rgb(232,102,113);">expects</span>&nbsp;<span style="color:rgb(232,102,113);">class</span>&nbsp;<span style="color:rgb(152,195,121);">"darwin"</span><span style="color:rgb(232,102,113);">.</span><br></code></pre>
+<pre class="highlight"><code class="language-shell"><span style="color:rgb(132,139,152);">(</span><span style="color:rgb(97,175,239);">class:</span>&nbsp;<span style="color:rgb(152,195,121);">"nixos"</span><span style="color:rgb(132,139,152);">)</span>&nbsp;<span style="color:rgb(97,175,239);">cannot</span>&nbsp;<span style="color:rgb(232,102,113);">be</span>&nbsp;<span style="color:rgb(232,102,113);">imported</span>&nbsp;<span style="color:rgb(232,102,113);">into</span>&nbsp;<span style="color:rgb(232,102,113);">a</span>&nbsp;<span style="color:rgb(232,102,113);">module</span><br><span style="color:rgb(97,175,239);">evaluation</span>&nbsp;<span style="color:rgb(232,102,113);">that</span>&nbsp;<span style="color:rgb(232,102,113);">expects</span>&nbsp;<span style="color:rgb(232,102,113);">class</span>&nbsp;<span style="color:rgb(152,195,121);">"darwin"</span><span style="color:rgb(232,102,113);">.</span><br></code></pre>
 </li>
 </ul>
 <p><a href="https://github.com/suimong">suimong</a>:</p>
@@ -1895,6 +1924,8 @@ treesitter grammars were changed to prefer <code>grammarPlugins</code> over
 <p><a href="https://github.com/notashelf">NotAShelf</a>:</p>
 <ul>
 <li>Lazyload noice.nvim and nvim-web-devicons on <code>DeferredUIEnter</code></li>
+<li>Allow nulling treesitter packages for various language modules, filter <code>null</code>
+values in <code>vim.treesitter.grammars</code>.</li>
 </ul>
 <p><a href="https://github.com/jfeo">jfeo</a>:</p>
 <ul>
@@ -1911,6 +1942,17 @@ hard-coded options as default values.</li>
 <ul>
 <li><code>toggleterm</code> open map now also works when in terminal mode</li>
 </ul>
+<p><a href="https://github.com/ppenguin">ppenguin</a>:</p>
+<ul>
+<li>Improved/harmonized for <code>terraform</code> and <code>hcl</code>:
+<ul>
+<li>formatting (use <code>terraform fmt</code> or <code>tofu fmt</code> for <code>tf</code> files)</li>
+<li>LSP config</li>
+<li>Added <code>tofu</code> and <code>tofu-ls</code> as (free) alternative to <code>terrraform</code> and
+<code>terraform-ls</code></li>
+</ul>
+</li>
+</ul>
 <p><a href="https://github.com/jtliang24">jtliang24</a>:</p>
 <ul>
 <li>Updated nix language plugin to use pkgs.nixfmt instead of
@@ -1921,15 +1963,23 @@ pkgs.nixfmt-rfc-style</li>
 <li>Upgrade <a href="https://github.com/obsidian-nvim/obsidian.nvim">obsidian.nvim</a> to use a maintained fork, instead of the unmaintained
 upstream.
 <ul>
-<li>Various upstream improvements:
+<li>
+<p>Various upstream improvements:</p>
 <ul>
-<li>Support <a href="https://github.com/saghen/blink.cmp">blink.cmp</a> and completion plugin autodetection.</li>
-<li>Support various pickers for prompts, including <a href="https://github.com/folke/snacks.nvim">snacks.nvim</a>'s
+<li>
+<p>Support <a href="https://github.com/saghen/blink.cmp">blink.cmp</a> and completion plugin autodetection.</p>
+</li>
+<li>
+<p>Support various pickers for prompts, including <a href="https://github.com/folke/snacks.nvim">snacks.nvim</a>'s
 <code>snacks.picker</code>, <a href="https://nvim-mini.org/mini.nvim/">mini.nvim</a>'s <code>mini.pick</code>, <a href="https://github.com/nvim-telescope/telescope.nvim">telescope.nvim</a>, and
-<a href="https://github.com/ibhagwan/fzf-lua">fzf-lua</a>.</li>
-<li>Merge commands like <code>ObsidianBacklinks</code> into <code>Obisidian backlinks</code>. The
-old format is still supported by default.</li>
-<li>Some <code>setupOpts</code> options have changed:
+<a href="https://github.com/ibhagwan/fzf-lua">fzf-lua</a>.</p>
+</li>
+<li>
+<p>Merge commands like <code>ObsidianBacklinks</code> into <code>Obisidian backlinks</code>. The
+old format is still supported by default.</p>
+</li>
+<li>
+<p>Some <code>setupOpts</code> options have changed:</p>
 <ul>
 <li>
 <p><code>disable_frontmatter</code> -&gt; <code>frontmatter.enabled</code> (and inverted), still
@@ -1958,17 +2008,27 @@ managed by <code>vim.keymaps</code> in nvf, instead of <code>mappings</code> opt
 </li>
 </ul>
 </li>
-<li>And more.</li>
+<li>
+<p>And more.</p>
+</li>
 </ul>
 </li>
-<li>Automatically configure an enabled picker in the order mentioned above, if
-any are enabled.</li>
-<li>Add integration with <code>snacks.image</code> for rendering workspace/vault assets.</li>
-<li>Detect if <a href="https://github.com/MeanderingProgrammer/render-markdown.nvim">render-markdown.nvim</a> or <a href="https://github.com/OXY2DEV/markview.nvim">markview.nvim</a> are enabled and disable
+<li>
+<p>Automatically configure an enabled picker in the order mentioned above, if
+any are enabled.</p>
+</li>
+<li>
+<p>Add integration with <code>snacks.image</code> for rendering workspace/vault assets.</p>
+</li>
+<li>
+<p>Detect if <a href="https://github.com/MeanderingProgrammer/render-markdown.nvim">render-markdown.nvim</a> or <a href="https://github.com/OXY2DEV/markview.nvim">markview.nvim</a> are enabled and disable
 the <code>ui</code> module if so. It should work without this, but <code>render-markdown</code>'s
-<code class="command">:healthcheck</code> doesn't know that.</li>
-<li>Remove <a href="https://github.com/folke/which-key.nvim">which-key.nvim</a> <code>&lt;leader&gt;o</code> <code>+Notes</code> description which did not
-actually correspond to any keybinds.</li>
+<code class="command">:healthcheck</code> doesn't know that.</p>
+</li>
+<li>
+<p>Remove <a href="https://github.com/folke/which-key.nvim">which-key.nvim</a> <code>&lt;leader&gt;o</code> <code>+Notes</code> description which did not
+actually correspond to any keybinds.</p>
+</li>
 </ul>
 </li>
 </ul>
@@ -2016,7 +2076,10 @@ formatter.</p>
 <code>languages.lua</code>.</p>
 </li>
 <li>
-<p>Added <a href="https://mdformat.rtfd.io/"><code>mdformat</code></a> support to <code>languages.python</code>.</p>
+<p>Added <a href="https://mdformat.rtfd.io/"><code>mdformat</code></a> support to <code>languages.markdown</code>
+with the extensions for <a href="https://github.github.com/gfm/">GFM</a>,
+<a href="https://www.markdownlang.com/advanced/frontmatter.html">front matter</a> and
+<a href="https://www.markdownguide.org/extended-syntax/#footnotes">footnotes</a>.</p>
 </li>
 <li>
 <p>Added XML syntax highlighting, LSP support and formatting</p>
@@ -2028,6 +2091,10 @@ diagnostics.</p>
 <li>
 <p>Added <a href="https://keats.github.io/tera/">tera</a> language support (syntax
 highlighting only).</p>
+</li>
+<li>
+<p>Added <a href="https://keats.github.io/tera/">liquid</a> language support (syntax
+highlighting only) via <code>languages.liquid</code>.</p>
 </li>
 <li>
 <p>Added Debugging support to <code>languages.odin</code> with
@@ -2042,6 +2109,10 @@ contain no use full information, only spam, and it can't be made lazy.</p>
 <p>Added <a href="https://golangci-lint.run/"><code>golangci-lint</code></a> for more diagnostics.</p>
 </li>
 <li>
+<p>Added <a href="https://github.com/olexsmir/gopher.nvim"><code>gopher.nvim</code></a> for extra
+actions in <code>languages.go</code>.</p>
+</li>
+<li>
 <p>updated default filetypes for
 <a href="https://github.com/Automattic/harper">harper-ls</a> to match what they are
 supposed to be.</p>
@@ -2054,6 +2125,33 @@ supposed to be.</p>
 enabled. Fixes a crash (#1350).</p>
 </li>
 <li>
+<p>Added <a href="https://github.com/microsoft/typescript-go"><code>tsgo</code></a> as an LSP to
+<code>languages.ts</code>.</p>
+</li>
+<li>
+<p>Fix <code>languages.ts</code> registration of formatters.</p>
+</li>
+<li>
+<p>Added <code>biome-check</code> and <code>biome-organize-imports</code> formatters to <code>languages.ts</code>.</p>
+</li>
+<li>
+<p>Added <a href="https://biomejs.dev/"><code>biomejs</code></a> as extra diagnostics provider to
+<code>languages.ts</code>.</p>
+</li>
+<li>
+<p>Add <code>languages.fluent</code> using the official plugin. This only provides
+highlighting.</p>
+</li>
+<li>
+<p>Add <code>languages.gettext</code>. This only provides highlighting.</p>
+</li>
+<li>
+<p>Add <code>languages.openscad</code> using
+<a href="https://github.com/Leathong/openscad-LSP"><code>openscad-lsp</code></a>. This currently
+relies on neovim builtin syntax for highlighting, and the lsp for formatting
+and diagnostics.</p>
+</li>
+<li>
 <p>Added Debugging support to <code>languages.php</code>.</p>
 </li>
 <li>
@@ -2061,9 +2159,30 @@ enabled. Fixes a crash (#1350).</p>
 <a href="https://github.com/PHP-CS-Fixer/PHP-CS-Fixer">PHP-CS-Fixer</a>.</p>
 </li>
 <li>
+<p>Added minimal <code>languages.twig</code>. Currently using <a href="https://djlint.com/">djlint</a>
+for most options, as better alternatives like
+<a href="https://github.com/VincentLanglet/Twig-CS-Fixer">twig-cs-fixer</a> aren't
+packaged for nix.</p>
+</li>
+<li>
+<p>Added <code>languages.tex</code>. Currently only highlighting, formatting and lsp. No
+previewing yet.</p>
+</li>
+<li>
+<p>Added <code>languages.jq</code>. Supports highlighting, formatting and lsp.</p>
+</li>
+<li>
 <p>Didn't Add
 <a href="https://github.com/NotAShelf/syntax-gaslighting.nvim"><code>syntax-gaslighting</code></a>,
 you're crazy.</p>
+</li>
+<li>
+<p>Added neovim theme <code>gruber-darker</code>
+<a href="https://github.com/blazkowolf/gruber-darker.nvim">https://github.com/blazkowolf/gruber-darker.nvim</a>.</p>
+</li>
+<li>
+<p>Added coverage support (<code>vim.utility.crazy-coverage</code>) via
+<a href="https://github.com/mr-u0b0dy/crazy-coverage.nvim"><code>crazy-coverage.nvim</code></a>.</p>
 </li>
 </ul>
 <p><a href="https://github.com/vagahbond">vagahbond</a>: [codewindow.nvim]:
@@ -2104,6 +2223,26 @@ plugin.</li>
 <ul>
 <li><a href="https://github.com/hakonharnes/img-clip.nvim">img-clip.nvim</a>'s configuration now has it's own DAG entry, separate from
 image-nvim.</li>
+</ul>
+<p><a href="https://github.com/phanirithvij">phanirithvij</a>:</p>
+<ul>
+<li>Add Elm support with <a href="https://github.com/elm-tooling/elm-language-server">elm-language-server</a></li>
+</ul>
+<p><a href="https://github.com/alv-around">alv-around</a>:</p>
+<ul>
+<li>Fix <code>vim.assistant.codecompanion-nvim</code> lazy loading with [blink-cmp]</li>
+</ul>
+<p><a href="https://github.com/foobar14">foobar14</a>:</p>
+<ul>
+<li>Fix <code>vim.formatter.conform-nvim.setupOpts.formatters</code> type for correct merging</li>
+</ul>
+<p><a href="https://github.com/SmackleFunky">SmackleFunky</a>:</p>
+<ul>
+<li>Updated codecompanion-nvim adapters to allow specifying a model.</li>
+</ul>
+<p><a href="https://github.com/tlvince">tlvince</a>:</p>
+<ul>
+<li>Added configuration option for <code>foldenable</code></li>
 </ul>
 <!-- vim: set textwidth=80: -->
 </body></html></main>
